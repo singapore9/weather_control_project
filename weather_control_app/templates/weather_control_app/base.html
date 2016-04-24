@@ -40,12 +40,24 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-left">
-                <li class="{% active_page request 'weather_control_app:home' %}"><a href="{% url 'weather_control_app:home' %}">Home</a></li>
+                <li class="{% active_page request 'weather_control_app:home' %}">
+                    <a href="{% url 'weather_control_app:home' %}">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li class="{% active_page request 'weather_control_app:login' %}"><a href="{% url 'weather_control_app:login' %}">SMTHNG</a> </li>
+
+            {% if user.is_authenticated %}
+                <li class="{% active_page request 'weather_control_app:logout' %}">
+                    <a href="{% url 'weather_control_app:logout' %}">Log out</a>
+                </li>
+            {% else %}
+                <li class="{% active_page request 'weather_control_app:login' %}">
+                    <a href="{% url 'weather_control_app:login' %}">Log in</a>
+                </li>
+            {% endif %}
+
+
             </ul>
         </div><!--/.nav-collapse -->
 

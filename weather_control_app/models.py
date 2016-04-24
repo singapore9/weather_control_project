@@ -7,7 +7,7 @@ import time
 # Create your models here.
 
 WEATHER_APP_ID = '9b48f2acc414d715d89ad001a3456650'
-WEATHER_API = 'http://api.openweathermap.org/data/2.5/forecast/city?id=%s&APPID=%s'
+WEATHER_API = 'http://api.openweathermap.org/data/2.5/group?id=%s&units=metric&appid=%s'
 
 
 def home(request):
@@ -23,8 +23,37 @@ def home(request):
 
 def update_info():
     all_id = ','.join(map(lambda x: str(x.id), City.objects.all()))
-    # general_info = requests.get(WEATHER_API % ())
-    print(all_id)
+    general_info = requests.get(WEATHER_API % (all_id, WEATHER_APP_ID)).json()
+    # print(general_info)
+    for i in range(general_info['cnt']):
+        info = general_info['list'][i]
+        # print(info)
+        city = City.objects.get(id=info['id'])
+        time_ = datetime_.fromtimestamp(info['dt']).replace(tzinfo=None)
+        temperature = info['main']['temp']
+        wind_speed = info['wind']['speed']
+        try:
+            rain = float(info['rain']['1h'])
+        except:
+            rain = 0
+        try:
+            snow = float(info['snow']['1h'])
+        except:
+            snow = 0
+        try:
+            clouds = float(info['clouds']['all'])
+        except:
+            clouds = 0
+        weather_info = WeatherInfo(
+            city=city,
+            time=time_,
+            temperature=temperature,
+            wind_speed=wind_speed,
+            rain=rain,
+            snow=snow,
+            clouds=clouds
+        )
+        weather_info.save()
 
 class City(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -44,8 +73,11 @@ def set_pk_for_weather_city(time_, city):
 class WeatherInfo(models.Model):
     city = models.ForeignKey(City)
     time = models.DateTimeField()
-    temperature = models.IntegerField()
-    rain = models.IntegerField()
-    snow = models.IntegerField()
-    clouds = models.IntegerField()
+    temperature = models.FloatField()
+    rain = models.FloatField()
+    snow = models.FloatField()
+    clouds = models.FloatField()
     wind_speed = models.FloatField()
+
+    def __str__(self):
+        return ', '.join([self.time.strftime("%d %m %y %H:%M:%S"), str(self.temperature) + 'K', str(self.wind_speed) + 'mps'])

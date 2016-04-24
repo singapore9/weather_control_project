@@ -16,3 +16,4 @@ def active_page(request, view_name):
             return ""
     except Resolver404:
         return ""
+

@@ -14,7 +14,6 @@ def index(request):
 
 def home(request):
     msg = models.home(request)
-    models.update_info()
     return render(request, 'weather_control_app/home.html', msg)
 
 
@@ -31,11 +30,11 @@ class SignUpFormView(FormView):
         return super(SignUpFormView, self).form_valid(form)
 
 
-def login_or_logout(request):
-    if request.user.is_authenticated():
-        return LogoutFormView.as_view()(request)
-    else:
-        return LoginFormView.as_view()(request)
+# def login_or_logout(request):
+#     if request.user.is_authenticated():
+#         return LogoutFormView.as_view()(request)
+#     else:
+#         return LoginFormView.as_view()(request)
 
 
 class LoginFormView(FormView):
