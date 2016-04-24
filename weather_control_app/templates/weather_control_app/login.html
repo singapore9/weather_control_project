@@ -1,0 +1,14 @@
+{% extends 'weather_control_app/base.html' %}
+
+{% block title %}LogIn{% endblock %}
+
+{% block content %}
+    <div align="center">
+        <form action="" method="post" style="margin-top: 50px">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn btn-primary" style="margin-top: 10px">Log In</button>
+        </form>
+        <a href="../signup">Sign up</a>
+    </div>
+{% endblock %}

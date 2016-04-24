@@ -1,0 +1,31 @@
+{% extends 'weather_control_app/base.html' %}
+
+{% block title %}
+    Registration
+{% endblock %}
+
+{% block content %}
+    <div align="center">
+<h1> Registration </h1>
+<form action="" method="post" >
+    {% csrf_token %}
+    {% for field in form %}
+        <dt>{{ field.label_tag }}</dt>
+
+        <dd>
+            {% if field.help_text %}
+                <span title="{{ field.help_text }}">{{ field }}</span>
+            {% else %}
+                {{ field }}
+            {% endif %}
+            {% if field.errors %}
+                <div class="myerrors clearfix" style="color: red">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        </dd>
+    {% endfor %}
+    <button type="submit" class="btn btn btn-primary" style="margin-top: 10px">Confirm entry</button>
+</form>
+    </div>
+{% endblock %}
